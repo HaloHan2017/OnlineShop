@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yc.olshop.dao.ProductMapper" >
+  <resultMap id="BaseResultMap" type="com.yc.olshop.bean.Product" >
+    <id column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="pname" property="pname" jdbcType="VARCHAR" />
+    <result column="pimage" property="pimage" jdbcType="VARCHAR" />
+    <result column="real_price" property="realPrice" jdbcType="DOUBLE" />
+    <result column="disc_price" property="discPrice" jdbcType="DOUBLE" />
+    <result column="pupdate" property="pupdate" jdbcType="TIMESTAMP" />
+    <result column="pdowndate" property="pdowndate" jdbcType="TIMESTAMP" />
+    <result column="pflag" property="pflag" jdbcType="INTEGER" />
+    <result column="psalenum" property="psalenum" jdbcType="INTEGER" />
+    <result column="is_hot" property="isHot" jdbcType="INTEGER" />
+    <result column="cid" property="cid" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yc.olshop.bean.Product" extends="BaseResultMap" >
+    <result column="pdesc" property="pdesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    `pid`, `pname`, `pimage`, `real_price`, `disc_price`, `pupdate`, `pdowndate`, `pflag`, 
+    `psalenum`, `is_hot`, `cid`
+  </sql>
+  <sql id="Blob_Column_List" >
+    `pdesc`
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.yc.olshop.bean.ProductExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yc.olshop.bean.ProductExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from product
+    where `pid` = #{pid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from product
+    where `pid` = #{pid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yc.olshop.bean.ProductExample" >
+    delete from product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yc.olshop.bean.Product" >
+    insert into product (`pid`, `pname`, `pimage`, 
+      `real_price`, `disc_price`, `pupdate`, 
+      `pdowndate`, `pflag`, `psalenum`, 
+      `is_hot`, `cid`, `pdesc`
+      )
+    values (#{pid,jdbcType=INTEGER}, #{pname,jdbcType=VARCHAR}, #{pimage,jdbcType=VARCHAR}, 
+      #{realPrice,jdbcType=DOUBLE}, #{discPrice,jdbcType=DOUBLE}, #{pupdate,jdbcType=TIMESTAMP}, 
+      #{pdowndate,jdbcType=TIMESTAMP}, #{pflag,jdbcType=INTEGER}, #{psalenum,jdbcType=INTEGER}, 
+      #{isHot,jdbcType=INTEGER}, #{cid,jdbcType=INTEGER}, #{pdesc,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yc.olshop.bean.Product" >
+    insert into product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pid != null" >
+        `pid`,
+      </if>
+      <if test="pname != null" >
+        `pname`,
+      </if>
+      <if test="pimage != null" >
+        `pimage`,
+      </if>
+      <if test="realPrice != null" >
+        `real_price`,
+      </if>
+      <if test="discPrice != null" >
+        `disc_price`,
+      </if>
+      <if test="pupdate != null" >
+        `pupdate`,
+      </if>
+      <if test="pdowndate != null" >
+        `pdowndate`,
+      </if>
+      <if test="pflag != null" >
+        `pflag`,
+      </if>
+      <if test="psalenum != null" >
+        `psalenum`,
+      </if>
+      <if test="isHot != null" >
+        `is_hot`,
+      </if>
+      <if test="cid != null" >
+        `cid`,
+      </if>
+      <if test="pdesc != null" >
+        `pdesc`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pid != null" >
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="pname != null" >
+        #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="pimage != null" >
+        #{pimage,jdbcType=VARCHAR},
+      </if>
+      <if test="realPrice != null" >
+        #{realPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="discPrice != null" >
+        #{discPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="pupdate != null" >
+        #{pupdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pdowndate != null" >
+        #{pdowndate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pflag != null" >
+        #{pflag,jdbcType=INTEGER},
+      </if>
+      <if test="psalenum != null" >
+        #{psalenum,jdbcType=INTEGER},
+      </if>
+      <if test="isHot != null" >
+        #{isHot,jdbcType=INTEGER},
+      </if>
+      <if test="cid != null" >
+        #{cid,jdbcType=INTEGER},
+      </if>
+      <if test="pdesc != null" >
+        #{pdesc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yc.olshop.bean.ProductExample" resultType="java.lang.Integer" >
+    select count(*) from product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update product
+    <set >
+      <if test="record.pid != null" >
+        `pid` = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.pname != null" >
+        `pname` = #{record.pname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pimage != null" >
+        `pimage` = #{record.pimage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.realPrice != null" >
+        `real_price` = #{record.realPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.discPrice != null" >
+        `disc_price` = #{record.discPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.pupdate != null" >
+        `pupdate` = #{record.pupdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.pdowndate != null" >
+        `pdowndate` = #{record.pdowndate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.pflag != null" >
+        `pflag` = #{record.pflag,jdbcType=INTEGER},
+      </if>
+      <if test="record.psalenum != null" >
+        `psalenum` = #{record.psalenum,jdbcType=INTEGER},
+      </if>
+      <if test="record.isHot != null" >
+        `is_hot` = #{record.isHot,jdbcType=INTEGER},
+      </if>
+      <if test="record.cid != null" >
+        `cid` = #{record.cid,jdbcType=INTEGER},
+      </if>
+      <if test="record.pdesc != null" >
+        `pdesc` = #{record.pdesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update product
+    set `pid` = #{record.pid,jdbcType=INTEGER},
+      `pname` = #{record.pname,jdbcType=VARCHAR},
+      `pimage` = #{record.pimage,jdbcType=VARCHAR},
+      `real_price` = #{record.realPrice,jdbcType=DOUBLE},
+      `disc_price` = #{record.discPrice,jdbcType=DOUBLE},
+      `pupdate` = #{record.pupdate,jdbcType=TIMESTAMP},
+      `pdowndate` = #{record.pdowndate,jdbcType=TIMESTAMP},
+      `pflag` = #{record.pflag,jdbcType=INTEGER},
+      `psalenum` = #{record.psalenum,jdbcType=INTEGER},
+      `is_hot` = #{record.isHot,jdbcType=INTEGER},
+      `cid` = #{record.cid,jdbcType=INTEGER},
+      `pdesc` = #{record.pdesc,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update product
+    set `pid` = #{record.pid,jdbcType=INTEGER},
+      `pname` = #{record.pname,jdbcType=VARCHAR},
+      `pimage` = #{record.pimage,jdbcType=VARCHAR},
+      `real_price` = #{record.realPrice,jdbcType=DOUBLE},
+      `disc_price` = #{record.discPrice,jdbcType=DOUBLE},
+      `pupdate` = #{record.pupdate,jdbcType=TIMESTAMP},
+      `pdowndate` = #{record.pdowndate,jdbcType=TIMESTAMP},
+      `pflag` = #{record.pflag,jdbcType=INTEGER},
+      `psalenum` = #{record.psalenum,jdbcType=INTEGER},
+      `is_hot` = #{record.isHot,jdbcType=INTEGER},
+      `cid` = #{record.cid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yc.olshop.bean.Product" >
+    update product
+    <set >
+      <if test="pname != null" >
+        `pname` = #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="pimage != null" >
+        `pimage` = #{pimage,jdbcType=VARCHAR},
+      </if>
+      <if test="realPrice != null" >
+        `real_price` = #{realPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="discPrice != null" >
+        `disc_price` = #{discPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="pupdate != null" >
+        `pupdate` = #{pupdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pdowndate != null" >
+        `pdowndate` = #{pdowndate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pflag != null" >
+        `pflag` = #{pflag,jdbcType=INTEGER},
+      </if>
+      <if test="psalenum != null" >
+        `psalenum` = #{psalenum,jdbcType=INTEGER},
+      </if>
+      <if test="isHot != null" >
+        `is_hot` = #{isHot,jdbcType=INTEGER},
+      </if>
+      <if test="cid != null" >
+        `cid` = #{cid,jdbcType=INTEGER},
+      </if>
+      <if test="pdesc != null" >
+        `pdesc` = #{pdesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where `pid` = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yc.olshop.bean.Product" >
+    update product
+    set `pname` = #{pname,jdbcType=VARCHAR},
+      `pimage` = #{pimage,jdbcType=VARCHAR},
+      `real_price` = #{realPrice,jdbcType=DOUBLE},
+      `disc_price` = #{discPrice,jdbcType=DOUBLE},
+      `pupdate` = #{pupdate,jdbcType=TIMESTAMP},
+      `pdowndate` = #{pdowndate,jdbcType=TIMESTAMP},
+      `pflag` = #{pflag,jdbcType=INTEGER},
+      `psalenum` = #{psalenum,jdbcType=INTEGER},
+      `is_hot` = #{isHot,jdbcType=INTEGER},
+      `cid` = #{cid,jdbcType=INTEGER},
+      `pdesc` = #{pdesc,jdbcType=LONGVARCHAR}
+    where `pid` = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yc.olshop.bean.Product" >
+    update product
+    set `pname` = #{pname,jdbcType=VARCHAR},
+      `pimage` = #{pimage,jdbcType=VARCHAR},
+      `real_price` = #{realPrice,jdbcType=DOUBLE},
+      `disc_price` = #{discPrice,jdbcType=DOUBLE},
+      `pupdate` = #{pupdate,jdbcType=TIMESTAMP},
+      `pdowndate` = #{pdowndate,jdbcType=TIMESTAMP},
+      `pflag` = #{pflag,jdbcType=INTEGER},
+      `psalenum` = #{psalenum,jdbcType=INTEGER},
+      `is_hot` = #{isHot,jdbcType=INTEGER},
+      `cid` = #{cid,jdbcType=INTEGER}
+    where `pid` = #{pid,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 根据pid in查询 -->
+  <!-- <select id="selectByPidsWithPage" resultType="com.yc.olshop.bean.Product">
+  	SELECT p.pid,p.pname,p.pimage,p.disc_price from product p
+	where pid in
+	<foreach collection="pidArr" item="pid" index="index" open="(" close=")" separator=",">
+	  #{pid}
+	</foreach>
+	LIMIT #{index},#{pageSize}
+  </select>
+  <select id="getCountByPids" resultType="integer">
+  	 select count(pid) from product
+	 where pid in
+	 <foreach collection="pidArr" item="pid" index="index" open="(" close=")" separator=",">
+	  #{pid}
+	</foreach>
+  </select>
+   -->
+  <select id="selectByPidsWithPage" resultType="com.yc.olshop.bean.Product">
+  	SELECT p.pid,p.pname,p.pimage,p.disc_price as discPrice from product p
+	where pid in
+	<foreach collection="pidArr" item="pid" index="index" open="(" close=")" separator=",">
+	  #{pid}
+	</foreach>
+  </select>
+  <select id="selectCountPro" parameterType="int" resultType="int">
+  		SELECT COUNT(pid) FROM product
+  </select>
+    <select id="selectCountFlag" parameterType="int" resultType="int">
+		SELECT COUNT(pflag) FROM product WHERE pflag=1
+  </select>
+    <select id="selectCountHot" parameterType="int" resultType="int">
+		SELECT COUNT(is_hot) FROM product WHERE is_hot=1
+  </select>
+  <select id="selectALLsale" parameterType="int" resultType="int">
+  		SELECT SUM(psalenum) FROM product
+  </select>
+ 
+ 
+ 
+ <update id="addPSaleNumWithPid" parameterType="com.yc.olshop.bean.Product" >
+   	UPDATE product 
+	SET psalenum = psalenum + #{psalenum,jdbcType=INTEGER}
+	WHERE
+	pid = #{pid,jdbcType=INTEGER}
+  </update>
+ 
+</mapper>

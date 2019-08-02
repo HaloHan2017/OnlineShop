@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yc.olshop.dao.OrderitemMapper" >
+  <resultMap id="BaseResultMap" type="com.yc.olshop.bean.Orderitem" >
+    <id column="oitem_id" property="oitemId" jdbcType="INTEGER" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="pcount" property="pcount" jdbcType="INTEGER" />
+    <result column="sum_money" property="sumMoney" jdbcType="DOUBLE" />
+    <result column="oid" property="oid" jdbcType="VARCHAR" />
+    <result column="preal_price" property="prealPrice" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    `oitem_id`, `pid`, `pcount`, `sum_money`, `oid`, `preal_price`
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yc.olshop.bean.OrderitemExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from orderitem
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from orderitem
+    where `oitem_id` = #{oitemId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from orderitem
+    where `oitem_id` = #{oitemId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yc.olshop.bean.OrderitemExample" >
+    delete from orderitem
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yc.olshop.bean.Orderitem" >
+    insert into orderitem (`oitem_id`, `pid`, `pcount`, 
+      `sum_money`, `oid`, `preal_price`
+      )
+    values (#{oitemId,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER}, #{pcount,jdbcType=INTEGER}, 
+      #{sumMoney,jdbcType=DOUBLE}, #{oid,jdbcType=VARCHAR}, #{prealPrice,jdbcType=DOUBLE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yc.olshop.bean.Orderitem" >
+    insert into orderitem
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="oitemId != null" >
+        `oitem_id`,
+      </if>
+      <if test="pid != null" >
+        `pid`,
+      </if>
+      <if test="pcount != null" >
+        `pcount`,
+      </if>
+      <if test="sumMoney != null" >
+        `sum_money`,
+      </if>
+      <if test="oid != null" >
+        `oid`,
+      </if>
+      <if test="prealPrice != null" >
+        `preal_price`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="oitemId != null" >
+        #{oitemId,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="pcount != null" >
+        #{pcount,jdbcType=INTEGER},
+      </if>
+      <if test="sumMoney != null" >
+        #{sumMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="oid != null" >
+        #{oid,jdbcType=VARCHAR},
+      </if>
+      <if test="prealPrice != null" >
+        #{prealPrice,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yc.olshop.bean.OrderitemExample" resultType="java.lang.Integer" >
+    select count(*) from orderitem
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update orderitem
+    <set >
+      <if test="record.oitemId != null" >
+        `oitem_id` = #{record.oitemId,jdbcType=INTEGER},
+      </if>
+      <if test="record.pid != null" >
+        `pid` = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.pcount != null" >
+        `pcount` = #{record.pcount,jdbcType=INTEGER},
+      </if>
+      <if test="record.sumMoney != null" >
+        `sum_money` = #{record.sumMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="record.oid != null" >
+        `oid` = #{record.oid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prealPrice != null" >
+        `preal_price` = #{record.prealPrice,jdbcType=DOUBLE},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update orderitem
+    set `oitem_id` = #{record.oitemId,jdbcType=INTEGER},
+      `pid` = #{record.pid,jdbcType=INTEGER},
+      `pcount` = #{record.pcount,jdbcType=INTEGER},
+      `sum_money` = #{record.sumMoney,jdbcType=DOUBLE},
+      `oid` = #{record.oid,jdbcType=VARCHAR},
+      `preal_price` = #{record.prealPrice,jdbcType=DOUBLE}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yc.olshop.bean.Orderitem" >
+    update orderitem
+    <set >
+      <if test="pid != null" >
+        `pid` = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="pcount != null" >
+        `pcount` = #{pcount,jdbcType=INTEGER},
+      </if>
+      <if test="sumMoney != null" >
+        `sum_money` = #{sumMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="oid != null" >
+        `oid` = #{oid,jdbcType=VARCHAR},
+      </if>
+      <if test="prealPrice != null" >
+        `preal_price` = #{prealPrice,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where `oitem_id` = #{oitemId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yc.olshop.bean.Orderitem" >
+    update orderitem
+    set `pid` = #{pid,jdbcType=INTEGER},
+      `pcount` = #{pcount,jdbcType=INTEGER},
+      `sum_money` = #{sumMoney,jdbcType=DOUBLE},
+      `oid` = #{oid,jdbcType=VARCHAR},
+      `preal_price` = #{prealPrice,jdbcType=DOUBLE}
+    where `oitem_id` = #{oitemId,jdbcType=INTEGER}
+  </update>
+  <select id="queryItemForOrderByOid" resultMap="orderWithItemMap">
+    SELECT
+		*
+	FROM
+		orderitem o
+		LEFT JOIN product p ON o.pid = p.pid 
+	WHERE
+		o.oid = #{oid,jdbcType=VARCHAR}
+  </select>
+  
+  <resultMap id="orderWithItemMap" type="com.yc.olshop.bean.Orderitem" >
+    <id column="oitem_id" property="oitemId" jdbcType="INTEGER" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="pcount" property="pcount" jdbcType="INTEGER" />
+    <result column="sum_money" property="sumMoney" jdbcType="DOUBLE" />
+    <result column="oid" property="oid" jdbcType="VARCHAR" />
+    <result column="preal_price" property="prealPrice" jdbcType="DOUBLE" />
+    <association property="product" javaType="com.yc.olshop.bean.Product"
+    	autoMapping="true">
+    	<id column="pid" property="pid"></id>
+    </association>
+  </resultMap>
+</mapper>

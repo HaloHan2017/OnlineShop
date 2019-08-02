@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yc.olshop.dao.CommentMapper" >
+  <resultMap id="BaseResultMap" type="com.yc.olshop.bean.Comment" >
+    <id column="comm_id" property="commId" jdbcType="INTEGER" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="comm_time" property="commTime" jdbcType="TIMESTAMP" />
+    <result column="comm_stars" property="commStars" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yc.olshop.bean.Comment" extends="BaseResultMap" >
+    <result column="comm_content" property="commContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    `comm_id`, `pid`, `uid`, `comm_time`, `comm_stars`
+  </sql>
+  <sql id="Blob_Column_List" >
+    `comm_content`
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.yc.olshop.bean.CommentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yc.olshop.bean.CommentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from comment
+    where `comm_id` = #{commId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from comment
+    where `comm_id` = #{commId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yc.olshop.bean.CommentExample" >
+    delete from comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yc.olshop.bean.Comment" >
+    insert into comment (`comm_id`, `pid`, `uid`, 
+      `comm_time`, `comm_stars`, `comm_content`
+      )
+    values (#{commId,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, 
+      #{commTime,jdbcType=TIMESTAMP}, #{commStars,jdbcType=INTEGER}, #{commContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yc.olshop.bean.Comment" >
+    insert into comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="commId != null" >
+        `comm_id`,
+      </if>
+      <if test="pid != null" >
+        `pid`,
+      </if>
+      <if test="uid != null" >
+        `uid`,
+      </if>
+      <if test="commTime != null" >
+        `comm_time`,
+      </if>
+      <if test="commStars != null" >
+        `comm_stars`,
+      </if>
+      <if test="commContent != null" >
+        `comm_content`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="commId != null" >
+        #{commId,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="commTime != null" >
+        #{commTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commStars != null" >
+        #{commStars,jdbcType=INTEGER},
+      </if>
+      <if test="commContent != null" >
+        #{commContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yc.olshop.bean.CommentExample" resultType="java.lang.Integer" >
+    select count(*) from comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update comment
+    <set >
+      <if test="record.commId != null" >
+        `comm_id` = #{record.commId,jdbcType=INTEGER},
+      </if>
+      <if test="record.pid != null" >
+        `pid` = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.uid != null" >
+        `uid` = #{record.uid,jdbcType=INTEGER},
+      </if>
+      <if test="record.commTime != null" >
+        `comm_time` = #{record.commTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.commStars != null" >
+        `comm_stars` = #{record.commStars,jdbcType=INTEGER},
+      </if>
+      <if test="record.commContent != null" >
+        `comm_content` = #{record.commContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update comment
+    set `comm_id` = #{record.commId,jdbcType=INTEGER},
+      `pid` = #{record.pid,jdbcType=INTEGER},
+      `uid` = #{record.uid,jdbcType=INTEGER},
+      `comm_time` = #{record.commTime,jdbcType=TIMESTAMP},
+      `comm_stars` = #{record.commStars,jdbcType=INTEGER},
+      `comm_content` = #{record.commContent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update comment
+    set `comm_id` = #{record.commId,jdbcType=INTEGER},
+      `pid` = #{record.pid,jdbcType=INTEGER},
+      `uid` = #{record.uid,jdbcType=INTEGER},
+      `comm_time` = #{record.commTime,jdbcType=TIMESTAMP},
+      `comm_stars` = #{record.commStars,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yc.olshop.bean.Comment" >
+    update comment
+    <set >
+      <if test="pid != null" >
+        `pid` = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        `uid` = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="commTime != null" >
+        `comm_time` = #{commTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commStars != null" >
+        `comm_stars` = #{commStars,jdbcType=INTEGER},
+      </if>
+      <if test="commContent != null" >
+        `comm_content` = #{commContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where `comm_id` = #{commId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yc.olshop.bean.Comment" >
+    update comment
+    set `pid` = #{pid,jdbcType=INTEGER},
+      `uid` = #{uid,jdbcType=INTEGER},
+      `comm_time` = #{commTime,jdbcType=TIMESTAMP},
+      `comm_stars` = #{commStars,jdbcType=INTEGER},
+      `comm_content` = #{commContent,jdbcType=LONGVARCHAR}
+    where `comm_id` = #{commId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yc.olshop.bean.Comment" >
+    update comment
+    set `pid` = #{pid,jdbcType=INTEGER},
+      `uid` = #{uid,jdbcType=INTEGER},
+      `comm_time` = #{commTime,jdbcType=TIMESTAMP},
+      `comm_stars` = #{commStars,jdbcType=INTEGER}
+    where `comm_id` = #{commId,jdbcType=INTEGER}
+  </update>
+  <select id="selectAvgStar" parameterType="integer" resultType="double">
+  		SELECT AVG(`comm_stars`) FROM comment WHERE `pid`=#{pid,jdbcType=INTEGER}
+  </select>
+  <select id="selectcountcomm" parameterType="integer" resultType="integer">
+  		SELECT COUNT(comm_id) FROM comment
+  </select>
+    <resultMap type="com.yc.olshop.bean.Comment" id="commentMap">
+  	 <id column="comm_id" property="commId" jdbcType="INTEGER" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="comm_time" property="commTime" jdbcType="TIMESTAMP" />
+    <result column="comm_stars" property="commStars" jdbcType="INTEGER" />
+    <result column="comm_content" property="commContent" jdbcType="LONGVARCHAR" />
+    <association property="user" javaType="com.yc.olshop.bean.User">
+    	<id column="uid" property="uid" jdbcType="INTEGER" />
+    	<result column="name" property="name" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  <select id="selectAllComment" resultMap="commentMap">
+  	SELECT a.* , b.name FROM `comment` a JOIN `user` b ON a.uid=b.uid AND a.pid=#{pid,jdbcType=INTEGER}
+  </select>
+</mapper>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yc.olshop.dao.LinksMapper" >
+  <resultMap id="BaseResultMap" type="com.yc.olshop.bean.Links" >
+    <id column="lid" property="lid" jdbcType="INTEGER" />
+    <result column="lname" property="lname" jdbcType="VARCHAR" />
+    <result column="lurl" property="lurl" jdbcType="VARCHAR" />
+    <result column="ltime" property="ltime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    `lid`, `lname`, `lurl`, `ltime`
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yc.olshop.bean.LinksExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from links
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from links
+    where `lid` = #{lid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from links
+    where `lid` = #{lid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yc.olshop.bean.LinksExample" >
+    delete from links
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yc.olshop.bean.Links" >
+    insert into links (`lid`, `lname`, `lurl`, 
+      `ltime`)
+    values (#{lid,jdbcType=INTEGER}, #{lname,jdbcType=VARCHAR}, #{lurl,jdbcType=VARCHAR}, 
+      #{ltime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yc.olshop.bean.Links" >
+    insert into links
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="lid != null" >
+        `lid`,
+      </if>
+      <if test="lname != null" >
+        `lname`,
+      </if>
+      <if test="lurl != null" >
+        `lurl`,
+      </if>
+      <if test="ltime != null" >
+        `ltime`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="lid != null" >
+        #{lid,jdbcType=INTEGER},
+      </if>
+      <if test="lname != null" >
+        #{lname,jdbcType=VARCHAR},
+      </if>
+      <if test="lurl != null" >
+        #{lurl,jdbcType=VARCHAR},
+      </if>
+      <if test="ltime != null" >
+        #{ltime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yc.olshop.bean.LinksExample" resultType="java.lang.Integer" >
+    select count(*) from links
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update links
+    <set >
+      <if test="record.lid != null" >
+        `lid` = #{record.lid,jdbcType=INTEGER},
+      </if>
+      <if test="record.lname != null" >
+        `lname` = #{record.lname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lurl != null" >
+        `lurl` = #{record.lurl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ltime != null" >
+        `ltime` = #{record.ltime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update links
+    set `lid` = #{record.lid,jdbcType=INTEGER},
+      `lname` = #{record.lname,jdbcType=VARCHAR},
+      `lurl` = #{record.lurl,jdbcType=VARCHAR},
+      `ltime` = #{record.ltime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yc.olshop.bean.Links" >
+    update links
+    <set >
+      <if test="lname != null" >
+        `lname` = #{lname,jdbcType=VARCHAR},
+      </if>
+      <if test="lurl != null" >
+        `lurl` = #{lurl,jdbcType=VARCHAR},
+      </if>
+      <if test="ltime != null" >
+        `ltime` = #{ltime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where `lid` = #{lid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yc.olshop.bean.Links" >
+    update links
+    set `lname` = #{lname,jdbcType=VARCHAR},
+      `lurl` = #{lurl,jdbcType=VARCHAR},
+      `ltime` = #{ltime,jdbcType=TIMESTAMP}
+    where `lid` = #{lid,jdbcType=INTEGER}
+  </update>
+</mapper>

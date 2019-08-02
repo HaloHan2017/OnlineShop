@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yc.olshop.dao.LeavemsgMapper" >
+  <resultMap id="BaseResultMap" type="com.yc.olshop.bean.Leavemsg" >
+    <id column="lm_id" property="lmId" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="lm_content" property="lmContent" jdbcType="VARCHAR" />
+    <result column="lm_time" property="lmTime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="lm_reply" property="lmReply" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    `lm_id`, `uid`, `lm_content`, `lm_time`, `state`, `lm_reply`
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yc.olshop.bean.LeavemsgExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from leavemsg
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from leavemsg
+    where `lm_id` = #{lmId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from leavemsg
+    where `lm_id` = #{lmId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yc.olshop.bean.LeavemsgExample" >
+    delete from leavemsg
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yc.olshop.bean.Leavemsg" >
+    insert into leavemsg (`lm_id`, `uid`, `lm_content`, 
+      `lm_time`, `state`, `lm_reply`
+      )
+    values (#{lmId,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{lmContent,jdbcType=VARCHAR}, 
+      #{lmTime,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, #{lmReply,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yc.olshop.bean.Leavemsg" >
+    insert into leavemsg
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="lmId != null" >
+        `lm_id`,
+      </if>
+      <if test="uid != null" >
+        `uid`,
+      </if>
+      <if test="lmContent != null" >
+        `lm_content`,
+      </if>
+      <if test="lmTime != null" >
+        `lm_time`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="lmReply != null" >
+        `lm_reply`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="lmId != null" >
+        #{lmId,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="lmContent != null" >
+        #{lmContent,jdbcType=VARCHAR},
+      </if>
+      <if test="lmTime != null" >
+        #{lmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="lmReply != null" >
+        #{lmReply,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yc.olshop.bean.LeavemsgExample" resultType="java.lang.Integer" >
+    select count(*) from leavemsg
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update leavemsg
+    <set >
+      <if test="record.lmId != null" >
+        `lm_id` = #{record.lmId,jdbcType=INTEGER},
+      </if>
+      <if test="record.uid != null" >
+        `uid` = #{record.uid,jdbcType=INTEGER},
+      </if>
+      <if test="record.lmContent != null" >
+        `lm_content` = #{record.lmContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lmTime != null" >
+        `lm_time` = #{record.lmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.state != null" >
+        `state` = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.lmReply != null" >
+        `lm_reply` = #{record.lmReply,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update leavemsg
+    set `lm_id` = #{record.lmId,jdbcType=INTEGER},
+      `uid` = #{record.uid,jdbcType=INTEGER},
+      `lm_content` = #{record.lmContent,jdbcType=VARCHAR},
+      `lm_time` = #{record.lmTime,jdbcType=TIMESTAMP},
+      `state` = #{record.state,jdbcType=INTEGER},
+      `lm_reply` = #{record.lmReply,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yc.olshop.bean.Leavemsg" >
+    update leavemsg
+    <set >
+      <if test="uid != null" >
+        `uid` = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="lmContent != null" >
+        `lm_content` = #{lmContent,jdbcType=VARCHAR},
+      </if>
+      <if test="lmTime != null" >
+        `lm_time` = #{lmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="lmReply != null" >
+        `lm_reply` = #{lmReply,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where `lm_id` = #{lmId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yc.olshop.bean.Leavemsg" >
+    update leavemsg
+    set `uid` = #{uid,jdbcType=INTEGER},
+      `lm_content` = #{lmContent,jdbcType=VARCHAR},
+      `lm_time` = #{lmTime,jdbcType=TIMESTAMP},
+      `state` = #{state,jdbcType=INTEGER},
+      `lm_reply` = #{lmReply,jdbcType=VARCHAR}
+    where `lm_id` = #{lmId,jdbcType=INTEGER}
+  </update>
+</mapper>

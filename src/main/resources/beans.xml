@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<!-- 读取jdbc.properties -->
+	<context:property-placeholder location="classpath:jdbc.properties,classpath:redis.properties"/>
+
+	<!-- 创建DataSource -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="url" value="${jdbc.url}"/>
+		<property name="driverClassName" value="${jdbc.driverClass}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+	</bean>	
+	<!-- 创建Mybatis的会话工厂对象 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 关联连接池 -->
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 指定mybatis文件的位置，这里不做配置 -->
+		<!-- <property name="configLocation" value="classpath:mybatis.xml" /> -->
+		<!-- 扫描entity包 使用别名 -->
+		<!-- <property name="typeAliasesPackage" value="com.yc.olshop.bean" /> -->
+		<!-- <property name="typeAliases" >
+			<array>  
+		        <value>com.yc.olshop.bean.Article</value>  
+		    </array>
+		</property> -->
+		<!-- 扫描sql配置文件:mapper需要的xml文件 -->
+		<property name="mapperLocations" value="classpath:com/yc/olshop/dao/mapper/*.xml" />
+		<!-- 引入插件 -->
+		<property name="plugins">
+			<array>
+				<!-- mybatis分页插件 -->
+				<bean class="com.github.pagehelper.PageInterceptor">
+					<property name="properties">
+						<!-- helperDialect:连接数据库的类型-->
+						<value>helperDialect=mysql</value>
+					</property>
+				</bean>
+			</array>
+		</property>
+	</bean>
+
+	<!-- Mapper接口的扫描 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 配置Mapper接口所在包路径  -->
+		<property name="basePackage" value="com.yc.olshop.dao"/>
+	</bean>
+	
+	<!-- apache文件上传解析器 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	</bean>
+	
+	<!-- 开启Spring的IOC注解扫描 -->
+	<context:component-scan base-package="com.yc.olshop.biz"/>
+	
+	<!-- 开启Spring的事务 -->
+	<!-- -事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	<!-- 启用Spring事务注解 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	
+	
+	<!-- 加载配置文件(在上面配置了) -->
+	<!-- <context:property-placeholder location="classpath:redis.properties" /> -->
+	<!-- redis连接池配置-->  
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig" >  
+		<!--最大空闲数-->  
+		<property name="maxIdle" value="${redis.maxIdle}" />  
+        <!--连接池的最大数据库连接数  -->
+    	<property name="maxTotal" value="${redis.maxTotal}" />
+        <!--最大建立连接等待时间-->  
+        <property name="maxWaitMillis" value="${redis.maxWaitMillis}" />  
+        <!--逐出连接的最小空闲时间 默认1800000毫秒(30分钟)-->
+        <property name="minEvictableIdleTimeMillis" value="${redis.minEvictableIdleTimeMillis}" /> 
+        <!--每次逐出检查时 逐出的最大数目 如果为负数就是 : 1/abs(n), 默认3-->
+        <property name="numTestsPerEvictionRun" value="${redis.numTestsPerEvictionRun}" /> 
+        <!--逐出扫描的时间间隔(毫秒) 如果为负数,则不运行逐出线程, 默认-1-->
+        <property name="timeBetweenEvictionRunsMillis" value="${redis.timeBetweenEvictionRunsMillis}" /> 
+        <!--是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个-->  
+        <property name="testOnBorrow" value="${redis.testOnBorrow}" />  
+        <!--在空闲时检查有效性, 默认false  -->
+        <property name="testWhileIdle" value="${redis.testWhileIdle}" />  
+    </bean >
+    
+    
+	<!--redis连接工厂 -->
+	<bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" destroy-method="destroy"> 
+		<property name="poolConfig" ref="jedisPoolConfig"></property> 
+		<!--IP地址 -->
+		<property name="hostName" value="${redis.hostName}"></property> 
+		<!--端口号  -->
+		<property name="port" value="${redis.port}"></property> 
+		<!--如果Redis设置有密码  -->
+		<property name="password" value="${redis.password}" />
+		<!--客户端超时时间单位是毫秒  -->
+		<property name="timeout" value="${redis.timeout}"></property> 
+	</bean>  
+    
+    <!--redis操作模版,使用该对象可以操作redis  -->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate" >  
+        <property name="connectionFactory" ref="jedisConnectionFactory" />  
+        <!--如果不配置Serializer，那么存储的时候缺省使用String，如果用User类型存储，那么会提示错误User can't cast to String！！  -->  
+        <property name="keySerializer" >  
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />  
+        </property>  
+        <property name="valueSerializer" >  
+            <bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />  
+        </property>  
+        <property name="hashKeySerializer">  
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>  
+        </property>  
+        <property name="hashValueSerializer">  
+            <bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"/>  
+        </property>  
+        <!--开启事务  -->
+        <property name="enableTransactionSupport" value="true"></property>
+    </bean >  
+    
+    <!--自定义redis工具类,在需要缓存的地方注入此类  -->
+    
+    
+    <!-- spring整合 email工具 -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">  
+        <property name="host" value="smtp.qq.com"/>  
+        <property name="defaultEncoding" value="UTF-8"/>  
+        <property name="username" value="1006653740@qq.com"/>  
+        <property name="password" value="jvpckvnkvshgbeaa"/>  
+        <property name="javaMailProperties">  
+            <value>  
+                mail.smtp.auth=true  
+            </value>  
+        </property>  
+    </bean>
+    
+    <bean id="emailHelper" class="com.yc.olshop.utils.MimeMailHelper">  
+        <property name="javaMailSender" ref="mailSender"/>  
+    </bean> 
+</beans>

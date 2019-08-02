@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yc.olshop.dao.FavoriteMapper" >
+  <resultMap id="BaseResultMap" type="com.yc.olshop.bean.Favorite" >
+    <id column="fav_id" property="favId" jdbcType="INTEGER" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="fav_time" property="favTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    `fav_id`, `pid`, `uid`, `fav_time`
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yc.olshop.bean.FavoriteExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from favorite
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from favorite
+    where `fav_id` = #{favId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from favorite
+    where `fav_id` = #{favId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yc.olshop.bean.FavoriteExample" >
+    delete from favorite
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yc.olshop.bean.Favorite" >
+    insert into favorite (`fav_id`, `pid`, `uid`, 
+      `fav_time`)
+    values (#{favId,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, 
+      #{favTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yc.olshop.bean.Favorite" >
+    insert into favorite
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="favId != null" >
+        `fav_id`,
+      </if>
+      <if test="pid != null" >
+        `pid`,
+      </if>
+      <if test="uid != null" >
+        `uid`,
+      </if>
+      <if test="favTime != null" >
+        `fav_time`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="favId != null" >
+        #{favId,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="favTime != null" >
+        #{favTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yc.olshop.bean.FavoriteExample" resultType="java.lang.Integer" >
+    select count(*) from favorite
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update favorite
+    <set >
+      <if test="record.favId != null" >
+        `fav_id` = #{record.favId,jdbcType=INTEGER},
+      </if>
+      <if test="record.pid != null" >
+        `pid` = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.uid != null" >
+        `uid` = #{record.uid,jdbcType=INTEGER},
+      </if>
+      <if test="record.favTime != null" >
+        `fav_time` = #{record.favTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update favorite
+    set `fav_id` = #{record.favId,jdbcType=INTEGER},
+      `pid` = #{record.pid,jdbcType=INTEGER},
+      `uid` = #{record.uid,jdbcType=INTEGER},
+      `fav_time` = #{record.favTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yc.olshop.bean.Favorite" >
+    update favorite
+    <set >
+      <if test="pid != null" >
+        `pid` = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        `uid` = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="favTime != null" >
+        `fav_time` = #{favTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where `fav_id` = #{favId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yc.olshop.bean.Favorite" >
+    update favorite
+    set `pid` = #{pid,jdbcType=INTEGER},
+      `uid` = #{uid,jdbcType=INTEGER},
+      `fav_time` = #{favTime,jdbcType=TIMESTAMP}
+    where `fav_id` = #{favId,jdbcType=INTEGER}
+  </update>
+  <resultMap type="com.yc.olshop.bean.Product" id="productmap">
+  	<id column="pid" property="pid"/>
+  	<result column="real_price" property="realPrice"/>
+  	<result column="disc_price" property="discPrice"/>
+  	<result column="is_hot" property="isHot"/>
+  </resultMap>
+  <select id="selectByUid" resultMap="productmap">
+  		select 
+  			b.* 
+  		from 
+  			favorite a , product b 
+  		where 
+  			a.pid = b.pid and a.uid = #{uid,jdbcType=INTEGER} 
+  </select>	
+</mapper>
