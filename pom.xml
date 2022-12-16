@@ -11,7 +11,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
 		<!-- 自定义spring版本属性 -->
-		<spring-version>4.3.17.RELEASE</spring-version>
+		<spring-version>5.2.20.RELEASE</spring-version>
 	</properties>
 
 	<dependencies>
